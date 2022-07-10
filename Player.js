@@ -1,0 +1,153 @@
+class Player {
+
+  constructor(x, y, playerWidth, filename) {
+    this.x = x;
+    this.y = y;
+    this.playerWidth = playerWidth;
+    this.filename = filename;
+    this.playerImage = loadImage("images/" + this.filename + ".png");
+    //this.audio = loadSound("audio/" + this.filename + ".mp3");
+    this.audio;
+    this.button = new Button(this.x, this.y, this.playerWidth);
+    this.isPlaying = false;
+    this.isStopped = true;
+    this.isPaused = false;
+    this.audioHasLoaded = false;
+  }
+    
+  drawPlayer() {
+    this.drawImage();
+    this.drawFrame();
+    this.drawTitle();
+    this.drawButton();
+  }
+
+  drawImage() {
+    imageMode(CENTER);
+    this.playerImage.resize(200, 200);
+    image(this.playerImage, this.x, this.y);
+  }
+
+  drawFrame() {
+    rectMode(CENTER);
+    strokeWeight(3);
+    stroke(210);
+    if(this.button.isMouseOverButton){
+        fill(0, 0);
+    }else{
+        fill(0, 60);
+    }
+    if(this.isPlaying){
+        stroke(222, 255, 0);
+    }
+    rect(this.x, this.y, this.playerWidth);
+  }
+
+  drawTitle() {
+    this.styleTitle();
+    if(this.button.isMouseOverButton || this.isPlaying){
+        text(this.filename, this.x, this.y+this.playerWidth/1.5);
+    }
+  }
+
+  drawButton(){  
+    if(this.audioHasLoaded){
+        // depending on isPlaying state we draw either play or pause
+        if(this.isPlaying){
+            
+            this.button.drawPauseButton(8, this.isPlaying);
+            
+//            if(this.button.isMouseOverLeftHalf){
+//               this.button.drawPauseButton(8, this.isPlaying); // scale = 8
+//            }
+//            if(this.button.isMouseOverRightHalf){
+//               this.button.drawStopButton(4, this.isPlaying);
+//            }
+            
+        }else{
+            this.button.drawPlayButton(8, this.audioHasLoaded);  // scale = 8
+        }
+    }else{
+        this.button.drawLoadButton();
+    }
+  }
+  
+  styleTitle(){
+    textSize(18);
+    textAlign(CENTER);
+    textStyle(NORMAL);
+    strokeWeight(0);
+    stroke(0);
+    if(this.isPlaying){
+        textStyle(BOLD);
+        fill(210);
+    }else{
+      fill(100);
+    }  
+  }
+  
+  togglePlaying(){
+    if(this.audioHasLoaded==false){
+        this.loadSoundOnce();
+    }else{
+        try{
+            if(this.isPlaying){
+                this.setPlayerPause();
+                
+//                // fallunterscheidung nach isMouseOverLeft/Right
+//                if(this.button.isMouseOverLeftHalf){
+//                    this.setPlayerPause();
+//                }
+//                if(this.button.isMouseOverRightHalf){
+//                    this.setPlayerStop();  
+//                }
+            }else{
+                this.setPlayerPlay(); 
+            }            
+        }catch(err){
+            console.log("sound not loaded yet");
+        }
+    }
+  }
+    
+  loadSoundOnce(){
+      //console.log("loading sound...");
+      this.audio = loadSound("audio/" + this.filename + ".mp3"/*, this.whenFinishedLoaded()*/);
+      this.audioHasLoaded=true;
+  }
+
+  // callback function !!!
+  whenFinishedLoaded(){
+      console.log("audio loaded successfully");
+  }
+
+  setPlayerPlay(){
+      this.audio.loop();
+      this.isPlaying = true;
+      this.isPaused = false;
+      this.isStopped = false;
+      //console.log("audio is playing now"); 
+  }
+    
+  setPlayerStop(){
+      this.audio.stop();
+      this.isPlaying = false;
+      this.isStopped = true;
+      this.isPaused = false;
+      //console.log("audio is stopped now");
+  }
+  
+  setPlayerPause(){
+      this.audio.pause();
+      this.isPlaying = false;
+      this.isPaused = true;
+      this.isStopped = false;
+      //console.log("audio is paused now");
+  }
+  
+  // for scrolling
+  updateY(yDelta){ 
+    this.y -= yDelta;
+    this.button.y -= yDelta;
+  }
+}
