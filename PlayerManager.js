@@ -14,8 +14,8 @@ class PlayerManager {
   populatePlayerArray() {
     for (var i = 0; i < this.numOfAudios; i++) {
       this.playerArray[i] = new Player(
-        this.getCoosForPlayer(i).x,
-        this.getCoosForPlayer(i).y,
+        this.getXYForPlayer(i).x,
+        this.getXYForPlayer(i).y,
         this.playerWidth,
         this.filenames[i]
       );
@@ -23,22 +23,23 @@ class PlayerManager {
   }
 
   drawPlayerManager() {
+    this.updateXandYofPlayer(); // make it dynamically change according to window size
     for (var i = 0; i < this.numOfAudios; i++) {
       this.playerArray[i].drawPlayer();
     }
   }
 
-  doWhenClicked() {
-    // toggle on/off player when clicked on
-    for (var i = 0; i < this.numOfAudios; i++) {
-      if (this.playerArray[i].button.isMouseOverButton == true) {
-        // if one of the other payers runs --> switch off
-        this.setOtherPlayersOff(i);
-        // then toggle this current player
-        this.playerArray[i].togglePlaying();
-      }
+    doWhenClicked() {
+        // toggle on/off player when clicked on
+        for (var i = 0; i < this.numOfAudios; i++) {
+            if (this.playerArray[i].button.isMouseOverButton == true) {
+                // if one of the other payers runs --> switch off
+                this.setOtherPlayersOff(i);
+                // then toggle this current player
+                this.playerArray[i].togglePlaying();
+            }
+        }
     }
-  }
 
   setOtherPlayersOff(n) {
     for (var i = 0; i < this.numOfAudios; i++) {
@@ -48,18 +49,25 @@ class PlayerManager {
     }
   }
     
-  getCoosForPlayer(i) {
+  getXYForPlayer(i) {
     var coos = createVector(0, 0);
     var numOfPlayersPerRow = floor(
-      width / (this.playerWidth + this.gapBetwPlayers)
+      windowWidth / (this.playerWidth + this.gapBetwPlayers)
     );
     coos.x =
       (i % numOfPlayersPerRow) * (this.gapBetwPlayers + this.playerWidth) +
       (this.gapBetwPlayers / 2 + this.playerWidth / 2);
     coos.y =
       floor(i / numOfPlayersPerRow) * (this.gapBetwPlayers + this.playerWidth) +
-      (20+this.playerWidth / 2);
+      (20+this.playerWidth / 2) - this.y;
     return coos;
+  }
+    
+  updateXandYofPlayer(){ //scroll doesnt work
+    for (var i = 0; i < this.numOfAudios; i++) {
+      this.playerArray[i].setPlayerAndButtonX(this.getXYForPlayer(i).x);
+      this.playerArray[i].setPlayerAndButtonY(this.getXYForPlayer(i).y);
+    }
   }
 
   updateY(yDelta) {

@@ -8,7 +8,7 @@ class Player {
     this.playerImage = loadImage("images/" + this.filename + ".png");
     //this.audio = loadSound("audio/" + this.filename + ".mp3");
     this.audio;
-    this.button = new Button(this.x, this.y, this.playerWidth);
+    this.button = new PlayerButton(this.x, this.y, this.playerWidth);
     this.isPlaying = false;
     this.isStopped = true;
     this.isPaused = false;
@@ -38,6 +38,7 @@ class Player {
         fill(0, 60);
     }
     if(this.isPlaying){
+        fill(0, 0);
         stroke(222, 255, 0);
     }
     rect(this.x, this.y, this.playerWidth);
@@ -50,28 +51,6 @@ class Player {
     }
   }
 
-  drawButton(){  
-    if(this.audioHasLoaded){
-        // depending on isPlaying state we draw either play or pause
-        if(this.isPlaying){
-            
-            this.button.drawPauseButton(8, this.isPlaying);
-            
-//            if(this.button.isMouseOverLeftHalf){
-//               this.button.drawPauseButton(8, this.isPlaying); // scale = 8
-//            }
-//            if(this.button.isMouseOverRightHalf){
-//               this.button.drawStopButton(4, this.isPlaying);
-//            }
-            
-        }else{
-            this.button.drawPlayButton(8, this.audioHasLoaded);  // scale = 8
-        }
-    }else{
-        this.button.drawLoadButton();
-    }
-  }
-  
   styleTitle(){
     textSize(18);
     textAlign(CENTER);
@@ -84,6 +63,20 @@ class Player {
     }else{
       fill(100);
     }  
+  }    
+    
+  drawButton(){
+      // UPDTE BUTTON'S X AND Y
+    if(this.audioHasLoaded){
+        // depending on isPlaying state we draw either play or pause
+        if(this.isPlaying){    
+            this.button.drawPauseButton(this.isPlaying);
+        }else{
+            this.button.drawPlayButton(this.audioHasLoaded);  // scale = 8
+        }
+    }else{
+        this.button.drawLoadButton();
+    }
   }
   
   togglePlaying(){
@@ -91,16 +84,9 @@ class Player {
         this.loadSoundOnce();
     }else{
         try{
+            // depending on isPlaying state we play or pause
             if(this.isPlaying){
                 this.setPlayerPause();
-                
-//                // fallunterscheidung nach isMouseOverLeft/Right
-//                if(this.button.isMouseOverLeftHalf){
-//                    this.setPlayerPause();
-//                }
-//                if(this.button.isMouseOverRightHalf){
-//                    this.setPlayerStop();  
-//                }
             }else{
                 this.setPlayerPlay(); 
             }            
@@ -112,7 +98,7 @@ class Player {
     
   loadSoundOnce(){
       //console.log("loading sound...");
-      this.audio = loadSound("audio/" + this.filename + ".mp3"/*, this.whenFinishedLoaded()*/);
+      this.audio = loadSound("audio/" + this.filename + ".mp3", this.whenFinishedLoaded());
       this.audioHasLoaded=true;
   }
 
@@ -143,6 +129,16 @@ class Player {
       this.isPaused = true;
       this.isStopped = false;
       //console.log("audio is paused now");
+  }
+    
+  setPlayerAndButtonX(x){
+      this.x = x;
+      this.button.x = x;
+  }
+    
+ setPlayerAndButtonY(y){
+      this.y = y;
+      this.button.y = y;
   }
   
   // for scrolling

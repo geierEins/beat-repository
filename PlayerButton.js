@@ -1,13 +1,13 @@
-class Button {
+class PlayerButton{
   constructor(x, y, width) {
     this.x = x;
     this.y = y;
     this.isMouseOverButton = false;
-    this.isMouseOverLeftHalf = false;
-    this.isMouseOverRightHalf = false;
     this.width = width;
     this.height = this.width;
     this.loadStyles();
+    this.upperYborder = windowHeight - controlbarHeight;
+    this.scaleFactor = 8;
   }
     
   loadStyles(){
@@ -17,27 +17,27 @@ class Button {
     this.colorHighlight = color(222,255,0);
   }
 
-  drawPlayButton(scaleFactor,audioHasLoaded) {
+  drawPlayButton(audioHasLoaded) {
       this.checkIfMouseOverButton();
       if(audioHasLoaded){
         this.stylePlaySymbol();
-        this.drawTriangle(scaleFactor);          
+        this.drawTriangle(this.scaleFactor);          
       }
   }
 
-  drawPauseButton(scaleFactor, isPlaying) {
+  drawPauseButton(isPlaying) {
       this.checkIfMouseOverButton();
       if(isPlaying){
         this.stylePauseSymbol();
-        this.drawTwinTowers(scaleFactor);          
+        this.drawTwinTowers(this.scaleFactor);          
       }
   }
 
-  drawStopButton(scalefactor, isPlaying){
+  drawStopButton(isPlaying){
       this.checkIfMouseOverButton();
       if(isPlaying){
         this.styleStopSymbol();
-        this.drawStopSymbol(scalefactor);          
+        this.drawStopSymbol(this.scalefactor);          
       }      
   }
   drawLoadButton(){
@@ -131,28 +131,13 @@ class Button {
       mouseX > this.x - this.width / 2 &&
       mouseX < this.x + this.width / 2 &&
       mouseY > this.y - this.height / 2 &&
-      mouseY < this.y + this.height / 2
+      mouseY < this.y + this.height / 2 &&
+      mouseY < this.upperYborder // border to lower control bar
     ) {
       this.isMouseOverButton = true;
       //console.log("mouse is over a button");
-      if(
-        mouseX > this.x - this.width / 2 &&
-        mouseX < this.x &&
-        mouseY > this.y - this.height / 2 &&
-        mouseY < this.y + this.height / 2      
-      ){
-           this.isMouseOverLeftHalf = true;
-           this.isMouseOverRightHalf = false;
-           //console.log("mouse is over left half of button")  
-       }else{
-           this.isMouseOverRightHalf = true;
-           this.isMouseOverLeftHalf = false;
-           //console.log("mouse is over right half of button") 
-       }
     } else {
         this.isMouseOverButton = false;
-        this.isMouseOverLeftHalf = false;
-        this.isMouseOverRightHalf = false;
     }
   }
 }
