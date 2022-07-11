@@ -1,14 +1,14 @@
 class Player {
 
-  constructor(x, y, playerWidth, filename) {
+  constructor(x, y, playerWidth, filename, controlBarHeight) {
     this.x = x;
     this.y = y;
     this.playerWidth = playerWidth;
     this.filename = filename;
-    this.playerImage = loadImage("images/" + this.filename + ".png");
+    this.playerImage = loadImage("images/covers/" + this.filename + ".png");
     //this.audio = loadSound("audio/" + this.filename + ".mp3");
     this.audio;
-    this.button = new PlayerButton(this.x, this.y, this.playerWidth);
+    this.button = new PlayerButton(this.x, this.y, this.playerWidth, controlBarHeight);
     this.isPlaying = false;
     this.isStopped = true;
     this.isPaused = false;
@@ -66,13 +66,12 @@ class Player {
   }    
     
   drawButton(){
-      // UPDTE BUTTON'S X AND Y
     if(this.audioHasLoaded){
         // depending on isPlaying state we draw either play or pause
         if(this.isPlaying){    
-            this.button.drawPauseButton(this.isPlaying);
+            this.button.drawPauseButton();
         }else{
-            this.button.drawPlayButton(this.audioHasLoaded);  // scale = 8
+            this.button.drawPlayButton();
         }
     }else{
         this.button.drawLoadButton();

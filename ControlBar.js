@@ -1,21 +1,23 @@
 class ControlBar{
     
-    constructor(playerArray){
+    constructor(controlbarHeight, playerArray){
         this.controlbarHeight = controlbarHeight;
         this.controlbarWidth = windowWidth;
         this.y = windowHeight-this.controlbarHeight/2;
         this.x = windowWidth/2;
         this.upperYborder = windowHeight - this.controlbarHeight;
+        this.volSlider = createSlider(-30, 0);
+        this.volSlider.position(this.x*3/4, this.y);
+        this.volSlider.style('width', windowWidth/4+'px');
+        this.volSlider.addClass("mySliders");
         this.playerArray = playerArray;
-        //this.playButton = new PlayerButton();
     }
     
     drawControlBar(){
         this.updateXY();
         this.drawFrame();
-        this.drawSeparator();
-        this.drawPoint();
-        //this.drawButtons();
+        this.drawLine();
+        this.drawSlider();
     }
     
     drawFrame(){
@@ -23,21 +25,24 @@ class ControlBar{
         rect(this.x, this.y, this.controlbarWidth, this.controlbarHeight);
     }
     
-    drawSeparator(){
+    drawLine(){
         stroke(222,255,0);
         strokeWeight(1);
         line(0, this.upperYborder, 2*this.x , this.upperYborder);
         //console.log(2*this.x);
     }
     
-    drawPoint(){
-        noStroke();
-        fill(255,0,0);
-        ellipse(this.x, this.y, 10);
+    drawSlider(){
+        //this.setMasterVolume(this.volSlider.value());
+        this.volSlider.style('width', windowWidth/2);
     }
     
-    drawButtons(){
-        
+    
+    setMasterVolume(value){
+        for(var i=0; i<this.playerArray.length; i++){
+            // setVolume = 0.0 ... 1.0 --> map value
+            this.playerArray[i].audio.setVolume(value);
+        }
     }
     
     styleFrame(){

@@ -1,43 +1,60 @@
 class PlayerManager {
-  constructor(filenames) {
-    this.y = 0;
-    this.playerWidth = 200;
-    this.gapBetwPlayers = 100;
-    this.filenames = filenames;
-      // TODO: TRIM filenames
-    this.numOfAudios = filenames.length-1;
-    //this.numOfAudios = 5;
-    this.playerArray = [];
-    this.populatePlayerArray();
-  }
-
-  populatePlayerArray() {
-    for (var i = 0; i < this.numOfAudios; i++) {
-      this.playerArray[i] = new Player(
-        this.getXYForPlayer(i).x,
-        this.getXYForPlayer(i).y,
-        this.playerWidth,
-        this.filenames[i]
-      );
+    constructor(filenames) {
+        this.y = 0;
+        this.playerWidth = 200;
+        this.gapBetwPlayers = 100;
+        this.filenames = filenames;
+        this.numOfAudios = filenames.length-1; // TODO: TRIM filenames
+        this.controlBarHeight = 30;
+        this.playerArray = [];
+        this.populatePlayerArray();
+        this.controlBar = new ControlBar(this.controlBarHeight, this.playerArray);
     }
-  }
 
-  drawPlayerManager() {
-    this.updateXandYofPlayer(); // make it dynamically change according to window size
-    for (var i = 0; i < this.numOfAudios; i++) {
-      this.playerArray[i].drawPlayer();
+    populatePlayerArray() {
+        for (var i = 0; i < this.numOfAudios; i++) {
+            this.playerArray[i] = new Player(
+            this.getXYForPlayer(i).x,
+            this.getXYForPlayer(i).y,
+            this.playerWidth,
+            this.filenames[i],
+            this.controlBarHeight);
+        }
     }
-  }
+
+    drawPlayerManager() {
+        this.drawPlayers();
+        this.drawUpperLine();
+        this.controlBar.drawControlBar();
+    }
+    
+    drawPlayers(){
+        // update x & y for dynamic change according to window size
+        this.updateXandYofPlayer(); 
+        for (var i = 0; i < this.numOfAudios; i++) {
+            this.playerArray[i].drawPlayer();
+        }
+    }
+    
+    drawUpperLine(){
+        stroke(222,255,0);
+        strokeWeight(1);
+        line(0, 0, windowWidth , 0);
+    }
 
     doWhenClicked() {
-        // toggle on/off player when clicked on
-        for (var i = 0; i < this.numOfAudios; i++) {
-            if (this.playerArray[i].button.isMouseOverButton == true) {
-                // if one of the other payers runs --> switch off
-                this.setOtherPlayersOff(i);
-                // then toggle this current player
-                this.playerArray[i].togglePlaying();
+        if(mouseY<this.controlBar.upperYborder){
+            // toggle on/off player when clicked on
+            for (var i = 0; i < this.numOfAudios; i++) {
+                if (this.playerArray[i].button.isMouseOverButton == true) {
+                    // if one of the other payers runs --> switch off
+                    this.setOtherPlayersOff(i);
+                    // then toggle this current player
+                    this.playerArray[i].togglePlaying();
+                }
             }
+        }else{
+            this.controlBar.doWhenClicked();
         }
     }
 
