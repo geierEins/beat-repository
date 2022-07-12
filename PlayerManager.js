@@ -43,12 +43,13 @@ class PlayerManager {
     }
 
     doWhenClicked() {
+        //only if click happens above upperYborder
         if(mouseY<this.controlBar.upperYborder){
             // toggle on/off player when clicked on
             for (var i = 0; i < this.numOfAudios; i++) {
                 if (this.playerArray[i].button.isMouseOverButton == true) {
                     // if one of the other payers runs --> switch off
-                    this.setOtherPlayersOff(i);
+                    this.setOtherPlayersOnPause(i);
                     // then toggle this current player
                     this.playerArray[i].togglePlaying();
                 }
@@ -58,13 +59,14 @@ class PlayerManager {
         }
     }
 
-  setOtherPlayersOff(n) {
-    for (var i = 0; i < this.numOfAudios; i++) {
-      if (this.playerArray[i].isPlaying && n != i) {
-        this.playerArray[i].setPlayerPause();
-      }
+    setOtherPlayersOnPause(n) {
+        for (var i = 0; i < this.numOfAudios; i++) {
+            // set each player on pause except the one we click on (n)
+            if (this.playerArray[i].isPlaying && n != i) {
+                this.playerArray[i].setPlayerPause();
+            }
+        }
     }
-  }
     
   getXYForPlayer(i) {
     var coos = createVector(0, 0);
