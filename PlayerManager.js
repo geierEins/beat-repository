@@ -5,7 +5,7 @@ class PlayerManager {
         this.gapBetwPlayers = 100;
         this.filenames = filenames;
         this.numOfAudios = filenames.length-1; // TODO: TRIM filenames
-        this.controlBarHeight = 30;
+        this.controlBarHeight = 20;
         this.playerArray = [];
         this.populatePlayerArray();
         this.controlBar = new ControlBar(this.controlBarHeight, this.playerArray);
@@ -53,9 +53,24 @@ class PlayerManager {
                     // then toggle this current player
                     this.playerArray[i].togglePlaying();
                 }
+//                if(this.playerArray[i].playerSlider.isMouseOverSlider){
+//                    this.doWhenClickedOnSlider();   
+//                }
             }
         }else{
             this.controlBar.doWhenClicked();
+        }
+    }
+    
+    doWhenClickedOnSlider(){
+        for (var i = 0; i < this.numOfAudios; i++) {
+         //this.playerArray[i].audio.jump(this.playerArray[i].audio.duration()/2);
+        }
+    }
+    
+    doWhenDraggedOverSlider(){
+        for (var i = 0; i < this.numOfAudios; i++) {
+            this.playerArray[i].playerSlider.doWhenDragged();
         }
     }
 
@@ -84,8 +99,8 @@ class PlayerManager {
     
   updateXandYofPlayer(){ //scroll doesnt work
     for (var i = 0; i < this.numOfAudios; i++) {
-      this.playerArray[i].setPlayerAndButtonX(this.getXYForPlayer(i).x);
-      this.playerArray[i].setPlayerAndButtonY(this.getXYForPlayer(i).y);
+      this.playerArray[i].setPlayersXs(this.getXYForPlayer(i).x);
+      this.playerArray[i].setPlayersYs(this.getXYForPlayer(i).y);
     }
   }
 

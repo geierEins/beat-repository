@@ -12,6 +12,8 @@ class Player {
         this.isStopped = true;
         this.isPaused = false;
         this.audioHasLoaded = false;
+        this.playerSliderOffsetY = 2.3;
+        this.playerSlider = new PlayerSlider(this.x, this.y+this.playerWidth/this.playerSliderOffsetY, this.playerWidth);
   }
     
     drawPlayer() {
@@ -19,6 +21,7 @@ class Player {
         this.drawFrame();
         this.drawTitle();
         this.drawButton();
+        this.drawSlider();
     }
 
     drawImage() {
@@ -49,6 +52,17 @@ class Player {
             text(this.filename, this.x, this.y+this.playerWidth/1.5);
         }
     }
+    
+    drawSlider(){
+        if(this.isPlaying){
+            this.playerSlider.drawSlider(this.audio.currentTime(), this.audio.duration());
+        }
+    }
+    
+    setPlayerVolume(value){
+        // from 0.0 to 1.0
+        this.audio.setVolume(value);
+    }
 
     styleTitle(){
         textSize(18);
@@ -68,8 +82,8 @@ class Player {
         if(this.audioHasLoaded){
             // depending on isPlaying state we draw either play or pause
             if(this.isPlaying){    
-                this.button.drawPauseButtonLeft();
-                this.button.drawStopButtonRight();
+                this.button.drawPauseButtonLeft(this.playerSlider.isMouseOverSlider);
+                this.button.drawStopButtonRight(this.playerSlider.isMouseOverSlider);
             }else{
                 this.button.drawPlayButton();
             }
@@ -88,11 +102,11 @@ class Player {
                 // depending on isPlaying state we play or pause
                 if(this.isPlaying){
                     // left --> pause
-                    if(this.button.isMouseOverButtonLeftHalf){
+                    if(this.button.isMouseOverButtonLeftHalf && this.playerSlider.isMouseOverSlider == false){
                         this.setPlayerPause();
                     }
                     // right --> stop
-                    if(this.button.isMouseOverButtonRightHalf){
+                    if(this.button.isMouseOverButtonRightHalf && this.playerSlider.isMouseOverSlider == false){
                         this.setPlayerStop();
                     }
                 }else{
@@ -139,14 +153,16 @@ class Player {
         //console.log("audio is paused now");
     }
     
-    setPlayerAndButtonX(x){
+    setPlayersXs(x){
         this.x = x;
         this.button.x = x;
+        this.playerSlider.x = x;
     }
     
-    setPlayerAndButtonY(y){
+    setPlayersYs(y){
         this.y = y;
         this.button.y = y;
+        this.playerSlider.y = y + this.playerWidth/this.playerSliderOffsetY  ;
     }
   
     // for scrolling

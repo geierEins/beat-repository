@@ -18,6 +18,7 @@ class PlayerButton{
         this.colorLight = 210;
         this.colorDark = 10;
         this.colorHighlight = color(222,255,0);
+        this.buttonAlpha = 160;
     }
     
     // MOUSE OVER DETECTION
@@ -65,9 +66,9 @@ class PlayerButton{
     }
 
     // DRAW PAUSE BUTTON (LEFT)
-    drawPauseButtonLeft(){
+    drawPauseButtonLeft(isOverSlider){
         this.checkIfMouseOverButtonTwoSides();
-        this.stylePauseSymbolLeft();
+        this.stylePauseSymbolLeft(isOverSlider);
         var offset = -1/4 * this.buttonWidth;
         var newX = this.x + offset;
         rect(
@@ -85,9 +86,9 @@ class PlayerButton{
     }
     
     // DRAW STOP BUTTON (RIGHT)
-    drawStopButtonRight(){
+    drawStopButtonRight(isOverSlider){
         this.checkIfMouseOverButtonTwoSides();
-        this.styleStopSymbolRight();        
+        this.styleStopSymbolRight(isOverSlider);        
         var offset = 1/4 * this.buttonWidth;
         var newX = this.x + offset;
         rectMode(CENTER);
@@ -142,39 +143,39 @@ class PlayerButton{
         } else {
             //strokeWeight(this.buttonStrokeWeight);
             stroke(this.colorLight);
-            fill(this.colorLight);
+            fill(this.colorLight, this.buttonAlpha);
         }
     }
     
     // STYLE PAUSE
-    stylePauseSymbolLeft(){
-        if (this.isMouseOverButtonLeftHalf) {
+    stylePauseSymbolLeft(isOverSlider){
+        if (this.isMouseOverButtonLeftHalf && isOverSlider==false) {
         //strokeWeight(this.buttonStrokeWeight);
             stroke(this.colorLight);
             fill(this.colorHighlight);
         } else {
          //strokeWeight(this.buttonStrokeWeight);
             stroke(this.colorLight);
-            fill(this.colorLight);
+            fill(this.colorLight, this.buttonAlpha);
         }
     }
     
     // STYLE STOP
-    styleStopSymbolRight(){
-        if (this.isMouseOverButtonRightHalf) {
+    styleStopSymbolRight(isOverSlider){
+        if (this.isMouseOverButtonRightHalf && isOverSlider==false) {
             //strokeWeight(this.buttonStrokeWeight);
             stroke(this.colorLight);
             fill(this.colorHighlight);
         } else {
             //strokeWeight(this.buttonStrokeWeight);
             stroke(this.colorLight);
-            fill(this.colorLight);
+            fill(this.colorLight, this.buttonAlpha);
         }
     }
     
     // STYLE LOAD
     styleLoadSymbol() {
-        textSize(40);
+        textSize(48);
         textStyle(BOLD);
         textAlign(CENTER);
         fill(this.colorHighlight);

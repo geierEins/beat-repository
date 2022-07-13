@@ -23,3 +23,7 @@ function mouseWheel(event){
     //move the square according to the vertical scroll amount
     this.playerManager.updateY(event.delta/2);
 }
+
+function mouseDragged(){
+    this.playerManager.doWhenDraggedOverSlider();
+}
