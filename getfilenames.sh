@@ -19,17 +19,17 @@ cd ..
 sed 's/.$//' fns0.txt > fns1.txt
 sed 's/.$//' fns1.txt > fns2.txt
 sed 's/.$//' fns2.txt > fns3.txt
-sed 's/.$//' fns3.txt > filenames.txt
+sed 's/.$//' fns3.txt > fns4.txt
 
 #sed '$ s/.$//' fns2.txt > fns3.txt
-#shuf fns4.txt > filenames.txt
+shuf fns4.txt > filenames.txt
 
 # delete temp files
 rm -f fns0.txt
 rm -f fns1.txt
 rm -f fns2.txt
 rm -f fns3.txt
-#rm -f fns4.txt
+rm -f fns4.txt
 
 #git actions
 #git add .

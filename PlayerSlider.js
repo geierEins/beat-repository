@@ -31,7 +31,8 @@ class PlayerSlider {
         //strokeWeight(1);
         //stroke(40);
         noStroke();
-        fill(235);
+        //fill(235);
+        fill(222,255,0);
         this.mapAudioCurrentTimeToHandleX(currentTime, duration);
         this.correctEdgeValues();
         ellipse(this.handleX, this.y, this.handleSize);
